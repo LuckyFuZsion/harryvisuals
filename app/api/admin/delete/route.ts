@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { isAdminAuthenticated } from '@/lib/admin-session'
 import {
+  bustGalleryCache,
   deleteGalleryImage,
   isCloudinaryConfigured,
 } from '@/lib/cloudinary'
@@ -27,6 +28,7 @@ export async function DELETE(request: Request) {
 
   try {
     await deleteGalleryImage(body.publicId)
+    bustGalleryCache()
     return NextResponse.json({ ok: true })
   } catch (error) {
     const message =

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { isAdminAuthenticated } from '@/lib/admin-session'
 import {
+  bustGalleryCache,
   isCloudinaryConfigured,
   reorderGalleryImages,
 } from '@/lib/cloudinary'
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
 
   try {
     await reorderGalleryImages(body.publicIds)
+    bustGalleryCache()
     return NextResponse.json({ ok: true })
   } catch (error) {
     const message =

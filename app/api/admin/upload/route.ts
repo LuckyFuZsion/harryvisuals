@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { isAdminAuthenticated } from '@/lib/admin-session'
 import {
+  bustGalleryCache,
   isCloudinaryConfigured,
-  listGalleryAssets,
+  listGalleryAssetsFresh,
   uploadGalleryImage,
 } from '@/lib/cloudinary'
 
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const existing = await listGalleryAssets()
+    const existing = await listGalleryAssetsFresh()
     let nextOrder = existing.length
     const uploaded = []
     for (const file of files) {
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
       uploaded.push(result)
     }
 
+    bustGalleryCache()
     return NextResponse.json({ uploaded })
   } catch (error) {
     const message =

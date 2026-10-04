@@ -1,6 +1,8 @@
+import { revalidateTag, unstable_cache } from 'next/cache'
 import { v2 as cloudinary } from 'cloudinary'
 
 export const GALLERY_FOLDER = 'harry-visuals/gallery'
+export const GALLERY_CACHE_TAG = 'gallery'
 const ORDER_CONTEXT_KEY = 'gallery_order'
 
 export function isCloudinaryConfigured() {
@@ -67,69 +69,87 @@ type CloudinaryResource = {
   context?: unknown
 }
 
+function cloudinaryErrorMessage(error: unknown) {
+  if (!error || typeof error !== 'object') return 'Cloudinary request failed'
+  const withNested = error as {
+    message?: string
+    error?: { message?: string; http_code?: number }
+  }
+  return (
+    withNested.error?.message ||
+    withNested.message ||
+    'Cloudinary request failed'
+  )
+}
+
 async function fetchGalleryResources(): Promise<CloudinaryResource[]> {
   const cloud = configureCloudinary()
-  const result = await cloud.api.resources({
-    type: 'upload',
-    prefix: `${GALLERY_FOLDER}/`,
-    max_results: 100,
-    resource_type: 'image',
-    context: true,
-  })
-  return (result.resources ?? []) as CloudinaryResource[]
+  try {
+    const result = await cloud.api.resources({
+      type: 'upload',
+      prefix: `${GALLERY_FOLDER}/`,
+      max_results: 100,
+      resource_type: 'image',
+      context: true,
+    })
+    return (result.resources ?? []) as CloudinaryResource[]
+  } catch (error) {
+    throw new Error(cloudinaryErrorMessage(error))
+  }
 }
 
 async function writeOrders(publicIds: string[]) {
   const cloud = configureCloudinary()
-  await Promise.all(
-    publicIds.map((publicId, index) => {
-      if (!publicId.startsWith(`${GALLERY_FOLDER}/`)) {
-        throw new Error('Invalid gallery asset')
-      }
-      return cloud.api.update(publicId, {
-        context: `${ORDER_CONTEXT_KEY}=${index}`,
-      })
-    }),
-  )
-}
-
-/** Ensure every asset has a stable gallery_order; backfill if missing. */
-async function withStableOrder(
-  resources: CloudinaryResource[],
-): Promise<CloudinaryGalleryAsset[]> {
-  const dated = [...resources].sort(
-    (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-  )
-
-  const missing = dated.some((resource) => parseOrder(resource.context) == null)
-  if (missing && dated.length > 0) {
-    await writeOrders(dated.map((resource) => resource.public_id))
-    return dated.map((resource, index) => ({
-      publicId: resource.public_id,
-      src: toWebpUrl(resource.public_id),
-      width: resource.width,
-      height: resource.height,
-      createdAt: resource.created_at,
-      order: index,
-    }))
+  // Sequential updates avoid bursting the free-tier Admin API limit.
+  for (const [index, publicId] of publicIds.entries()) {
+    if (!publicId.startsWith(`${GALLERY_FOLDER}/`)) {
+      throw new Error('Invalid gallery asset')
+    }
+    await cloud.api.update(publicId, {
+      context: `${ORDER_CONTEXT_KEY}=${index}`,
+    })
   }
-
-  return dated
-    .map((resource) => ({
-      publicId: resource.public_id,
-      src: toWebpUrl(resource.public_id),
-      width: resource.width,
-      height: resource.height,
-      createdAt: resource.created_at,
-      order: parseOrder(resource.context) ?? 0,
-    }))
-    .sort((a, b) => a.order - b.order || a.publicId.localeCompare(b.publicId))
 }
 
-export async function listGalleryAssets(): Promise<CloudinaryGalleryAsset[]> {
+/** Sort for display without writing back to Cloudinary on every page view. */
+function toSortedAssets(
+  resources: CloudinaryResource[],
+): CloudinaryGalleryAsset[] {
+  const mapped = resources.map((resource) => ({
+    publicId: resource.public_id,
+    src: toWebpUrl(resource.public_id),
+    width: resource.width,
+    height: resource.height,
+    createdAt: resource.created_at,
+    order:
+      parseOrder(resource.context) ??
+      new Date(resource.created_at).getTime(),
+  }))
+
+  return mapped.sort(
+    (a, b) => a.order - b.order || a.publicId.localeCompare(b.publicId),
+  )
+}
+
+async function listGalleryAssetsUncached(): Promise<CloudinaryGalleryAsset[]> {
   const resources = await fetchGalleryResources()
-  return withStableOrder(resources)
+  return toSortedAssets(resources)
+}
+
+/** Fresh Admin API read for uploads / admin UI. */
+export async function listGalleryAssetsFresh() {
+  return listGalleryAssetsUncached()
+}
+
+/** Cached Admin API read - protects free-tier rate limits. */
+export const listGalleryAssets = unstable_cache(
+  listGalleryAssetsUncached,
+  ['cloudinary-gallery-assets'],
+  { revalidate: 120, tags: [GALLERY_CACHE_TAG] },
+)
+
+export function bustGalleryCache() {
+  revalidateTag(GALLERY_CACHE_TAG, 'max')
 }
 
 export async function uploadGalleryImage(
@@ -139,8 +159,7 @@ export async function uploadGalleryImage(
 ) {
   const cloud = configureCloudinary()
   const nextOrder =
-    order ??
-    (await listGalleryAssets()).length
+    order ?? (await listGalleryAssetsUncached()).length
 
   return new Promise<{
     public_id: string
@@ -162,7 +181,11 @@ export async function uploadGalleryImage(
       },
       (error, result) => {
         if (error || !result) {
-          reject(error ?? new Error('Upload failed'))
+          reject(
+            new Error(
+              cloudinaryErrorMessage(error) || 'Upload failed',
+            ),
+          )
           return
         }
         resolve({
@@ -187,7 +210,7 @@ export async function deleteGalleryImage(publicId: string) {
 
   await cloud.uploader.destroy(publicId, { resource_type: 'image' })
 
-  const remaining = await listGalleryAssets()
+  const remaining = await listGalleryAssetsUncached()
   if (remaining.length > 0) {
     await writeOrders(remaining.map((asset) => asset.publicId))
   }

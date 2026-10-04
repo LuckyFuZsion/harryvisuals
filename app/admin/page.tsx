@@ -4,7 +4,7 @@ import { isAdminConfigured } from '@/lib/admin-auth'
 import { isAdminAuthenticated } from '@/lib/admin-session'
 import {
   isCloudinaryConfigured,
-  listGalleryAssets,
+  listGalleryAssetsFresh,
 } from '@/lib/cloudinary'
 
 export const dynamic = 'force-dynamic'
@@ -37,11 +37,11 @@ export default async function AdminPage() {
   }
 
   const cloudinaryReady = isCloudinaryConfigured()
-  let assets: Awaited<ReturnType<typeof listGalleryAssets>> = []
+  let assets: Awaited<ReturnType<typeof listGalleryAssetsFresh>> = []
 
   if (cloudinaryReady) {
     try {
-      assets = await listGalleryAssets()
+      assets = await listGalleryAssetsFresh()
     } catch {
       assets = []
     }
