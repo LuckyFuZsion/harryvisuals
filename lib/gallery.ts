@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache'
 import { isCloudinaryConfigured, listGalleryAssets } from '@/lib/cloudinary'
 
 export type GalleryAspect = 'portrait' | 'landscape' | 'square'
@@ -97,6 +98,8 @@ export const localGalleryItems: GalleryItem[] = [
 
 /** Prefer Cloudinary gallery; fall back to local shots. */
 export async function getGalleryItems(): Promise<GalleryItem[]> {
+  noStore()
+
   if (!isCloudinaryConfigured()) return localGalleryItems
 
   try {
@@ -110,7 +113,11 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
       category: '',
       aspect: aspectFromDims(asset.width, asset.height),
     }))
-  } catch {
+  } catch (error) {
+    console.error(
+      '[gallery] Cloudinary fetch failed, using local fallback',
+      error,
+    )
     return localGalleryItems
   }
 }
