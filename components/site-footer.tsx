@@ -102,6 +102,29 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
+
+      <div className="border-t border-border">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-2 px-4 py-5 sm:flex-row sm:gap-3 sm:px-6 lg:px-8">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+            Website by
+          </p>
+          <a
+            href="https://webfuzsion.co.uk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WebFuZsion web design"
+            className="inline-flex items-center transition-opacity hover:opacity-90"
+          >
+            <Image
+              src="/webfuzsion-logo.png"
+              alt="WebFuZsion"
+              width={180}
+              height={32}
+              className="h-6 w-auto"
+            />
+          </a>
+        </div>
+      </div>
     </footer>
   )
 }

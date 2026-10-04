@@ -2,6 +2,11 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Barlow_Condensed, Inter } from 'next/font/google'
 import { JsonLd } from '@/components/json-ld'
+import {
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+} from '@/lib/site-content'
 import './globals.css'
 
 const heading = Barlow_Condensed({
@@ -12,16 +17,18 @@ const heading = Barlow_Condensed({
 const body = Inter({ subsets: ['latin'], variable: '--font-body' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.harryvisuals.co.uk'),
-  title: 'Harry Visuals | Professional Sports Photography',
-  description:
-    'Premium football and athlete photography by Harry Visuals. Match day action, portraits and content for players, clubs and brands.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: '%s | Harry Visuals',
+  },
+  description: SITE_DESCRIPTION,
   generator: 'v0.app',
-  authors: [{ name: 'Harry Platts', url: 'https://www.harryvisuals.co.uk' }],
+  authors: [{ name: 'Harry Platts', url: SITE_URL }],
   creator: 'Harry Platts',
   publisher: 'Harry Visuals',
   alternates: {
-    canonical: 'https://www.harryvisuals.co.uk',
+    canonical: SITE_URL,
   },
   manifest: '/site.webmanifest',
   icons: {
@@ -33,16 +40,15 @@ export const metadata: Metadata = {
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   openGraph: {
-    title: 'Harry Visuals | Professional Sports Photography',
-    description:
-      'Premium football and athlete photography by Harry Visuals. Match day action, portraits and content for players, clubs and brands.',
-    url: 'https://www.harryvisuals.co.uk',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     siteName: 'Harry Visuals',
     images: [
       {
         url: '/opengraph.jpg',
-        width: 2848,
-        height: 1504,
+        width: 1200,
+        height: 630,
         alt: 'Harry Visuals sports photography',
       },
     ],
@@ -51,9 +57,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Harry Visuals | Professional Sports Photography',
-    description:
-      'Premium football and athlete photography by Harry Visuals. Match day action, portraits and content for players, clubs and brands.',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ['/opengraph.jpg'],
   },
 }

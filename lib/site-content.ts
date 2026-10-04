@@ -1,5 +1,12 @@
 export const SITE_URL = 'https://www.harryvisuals.co.uk'
 
+/** Keep under ~60 chars so SERP / social titles don't truncate. */
+export const SITE_TITLE = 'Harry Visuals | Sports Photography'
+
+/** Keep ~150-160 chars for Google; safe under social preview cutoffs. */
+export const SITE_DESCRIPTION =
+  'Football and athlete photography by Harry Visuals in Lincolnshire. Match-day action, portraits and content for players, clubs and brands.'
+
 export const faqItems = [
   {
     question: 'What does Harry Visuals photograph?',

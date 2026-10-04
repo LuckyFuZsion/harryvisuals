@@ -1,4 +1,9 @@
-import { faqItems, SITE_URL } from '@/lib/site-content'
+import {
+  faqItems,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+} from '@/lib/site-content'
 
 export function JsonLd() {
   const published = '2026-10-04'
@@ -62,8 +67,7 @@ export function JsonLd() {
     '@id': `${SITE_URL}/#website`,
     url: SITE_URL,
     name: 'Harry Visuals',
-    description:
-      'Premium football and athlete photography by Harry Visuals. Match day action, portraits and content for players, clubs and brands.',
+    description: SITE_DESCRIPTION,
     publisher: { '@id': `${SITE_URL}/#organization` },
     inLanguage: 'en-GB',
     datePublished: published,
@@ -74,10 +78,11 @@ export function JsonLd() {
     '@type': 'WebPage',
     '@id': `${SITE_URL}/#webpage`,
     url: SITE_URL,
-    name: 'Harry Visuals | Professional Sports Photography',
+    name: SITE_TITLE,
     isPartOf: { '@id': `${SITE_URL}/#website` },
     about: { '@id': `${SITE_URL}/#harry` },
     primaryImageOfPage: `${SITE_URL}/opengraph.jpg`,
+    description: SITE_DESCRIPTION,
     datePublished: published,
     dateModified: modified,
     inLanguage: 'en-GB',
