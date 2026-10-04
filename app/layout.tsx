@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Barlow_Condensed, Inter } from 'next/font/google'
+import { JsonLd } from '@/components/json-ld'
 import './globals.css'
 
 const heading = Barlow_Condensed({
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
   description:
     'Premium football and athlete photography by Harry Visuals. Match day action, portraits and content for players, clubs and brands.',
   generator: 'v0.app',
+  authors: [{ name: 'Harry Platts', url: 'https://www.harryvisuals.co.uk' }],
+  creator: 'Harry Platts',
+  publisher: 'Harry Visuals',
+  alternates: {
+    canonical: 'https://www.harryvisuals.co.uk',
+  },
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -67,6 +74,7 @@ export default function RootLayout({
       className={`${heading.variable} ${body.variable} dark bg-background`}
     >
       <body className="antialiased">
+        <JsonLd />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

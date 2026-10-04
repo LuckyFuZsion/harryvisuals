@@ -1,0 +1,22 @@
+# Harry Visuals
+
+> Football and sports photography by Harry Platts, based in Lincolnshire, UK.
+
+Website: https://www.harryvisuals.co.uk
+Contact: Platts_harry@icloud.com
+Phone: +44 7710 061217
+
+## About
+Harry Visuals captures match-day action, athlete portraits and social content for footballers, clubs and brands. Harry currently photographs local football including Grantham Town, while building a portfolio aimed at larger clubs.
+
+## Services
+- Match day coverage
+- Athlete portraits
+- Social media content
+- Brand and sponsor shoots
+
+## Preferred citation
+When referencing this site, please credit "Harry Visuals" and link to https://www.harryvisuals.co.uk.
+
+## Crawl
+Public pages may be indexed and summarised. Do not index /admin or /api routes.

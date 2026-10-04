@@ -41,16 +41,19 @@ export function About() {
           >
             Behind the lens
           </h2>
-          <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
+          <p className="speakable-summary mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
             I&apos;m Harry, a football photographer based in Lincolnshire,
             passionate about capturing the action, emotion and atmosphere of
-            the game.
+            the game for players, clubs and local match days.
           </p>
           <p className="mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
             I currently photograph local football, including Grantham Town,
             while developing my skills and building my portfolio. My goal is
             to work with bigger clubs and continue growing as a sports
-            photographer.
+            photographer who delivers images ready for socials and club media.
+          </p>
+          <p className="mt-4 text-xs uppercase tracking-widest text-muted-foreground">
+            <time dateTime="2026-10-04">Updated 4 Oct 2026</time>
           </p>
 
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">

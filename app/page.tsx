@@ -1,5 +1,6 @@
 import { About } from '@/components/about'
 import { Contact } from '@/components/contact'
+import { Faq } from '@/components/faq'
 import { Gallery } from '@/components/gallery'
 import { Hero } from '@/components/hero'
 import { SiteFooter } from '@/components/site-footer'
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <Gallery />
         <About />
+        <Faq />
         <Contact />
       </main>
       <SiteFooter />
