@@ -38,6 +38,10 @@ export function ContactForm() {
     const form = event.currentTarget
     const formData = new FormData(form)
 
+    // Clear any autofilled honeypot values before checking
+    const hpOne = String(formData.get('hv_hp_one') ?? '')
+    const hpTwo = String(formData.get('hv_hp_two') ?? '')
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -47,8 +51,8 @@ export function ContactForm() {
           email: formData.get('email'),
           shoot: formData.get('shoot'),
           message: formData.get('message'),
-          company: formData.get('company'),
-          website: formData.get('website'),
+          hv_hp_one: hpOne,
+          hv_hp_two: hpTwo,
         }),
       })
 
@@ -76,26 +80,28 @@ export function ContactForm() {
         className="relative flex flex-col gap-5 rounded-lg border border-border bg-card p-6 sm:p-8"
         onSubmit={onSubmit}
       >
-        {/* Honeypot fields — hidden from real users, bots often fill them */}
+        {/* Honeypot fields — obscure names avoid browser autofill */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"
         >
-          <label htmlFor="company">Company</label>
+          <label htmlFor="hv_hp_one">Leave blank</label>
           <input
-            id="company"
-            name="company"
+            id="hv_hp_one"
+            name="hv_hp_one"
             type="text"
             tabIndex={-1}
-            autoComplete="off"
+            autoComplete="new-password"
+            defaultValue=""
           />
-          <label htmlFor="website">Website</label>
+          <label htmlFor="hv_hp_two">Leave blank</label>
           <input
-            id="website"
-            name="website"
+            id="hv_hp_two"
+            name="hv_hp_two"
             type="text"
             tabIndex={-1}
-            autoComplete="off"
+            autoComplete="new-password"
+            defaultValue=""
           />
         </div>
         <div className="grid gap-5 sm:grid-cols-2">

@@ -17,22 +17,22 @@ export type ContactPayload = {
 
 export function isEmailConfigured() {
   return Boolean(
-    process.env.SMTP_HOST &&
-      process.env.SMTP_USER &&
-      process.env.SMTP_PASSWORD &&
-      process.env.CONTACT_EMAIL,
+    process.env.SMTP_HOST?.trim() &&
+      process.env.SMTP_USER?.trim() &&
+      process.env.SMTP_PASSWORD?.trim() &&
+      process.env.CONTACT_EMAIL?.trim(),
   )
 }
 
 function createTransport() {
-  const port = Number(process.env.SMTP_PORT || 587)
+  const port = Number(process.env.SMTP_PORT?.trim() || 587)
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host: process.env.SMTP_HOST!.trim(),
     port,
-    secure: process.env.SMTP_SECURE === 'true' || port === 465,
+    secure: process.env.SMTP_SECURE?.trim() === 'true' || port === 465,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
+      user: process.env.SMTP_USER!.trim(),
+      pass: process.env.SMTP_PASSWORD!.trim(),
     },
   })
 }
@@ -44,13 +44,13 @@ export async function sendContactEmail(payload: ContactPayload) {
 
   const shoot =
     shootLabels[payload.shoot] ?? payload.shoot ?? 'Not specified'
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER!
-  const to = process.env.CONTACT_EMAIL!
-  const cc = process.env.EMAIL_CC || undefined
+  const from = (process.env.SMTP_FROM || process.env.SMTP_USER)!.trim()
+  const to = process.env.CONTACT_EMAIL!.trim()
+  const cc = process.env.EMAIL_CC?.trim() || undefined
 
   const transport = createTransport()
 
-  await transport.sendMail({
+  const info = await transport.sendMail({
     from: `"Harry Visuals website" <${from}>`,
     to,
     cc,
@@ -76,6 +76,13 @@ export async function sendContactEmail(payload: ContactPayload) {
         <p style="white-space: pre-wrap;">${escapeHtml(payload.message)}</p>
       </div>
     `,
+  })
+
+  console.log('[contact] sent', {
+    to,
+    cc,
+    messageId: info.messageId,
+    response: info.response,
   })
 }
 
