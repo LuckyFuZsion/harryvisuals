@@ -27,7 +27,7 @@ export function SiteFooter() {
             />
           </a>
           <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-            Football photography by Harry Platts in Lincolnshire — match days,
+            Football photography by Harry Platts in Lincolnshire - match days,
             portraits and content for players and clubs.
           </p>
           <p className="text-sm text-muted-foreground">

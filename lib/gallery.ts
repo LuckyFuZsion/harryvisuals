@@ -122,5 +122,5 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
   }
 }
 
-/** @deprecated Use getGalleryItems() — kept for any static imports. */
+/** @deprecated Use getGalleryItems() - kept for any static imports. */
 export const galleryItems = localGalleryItems

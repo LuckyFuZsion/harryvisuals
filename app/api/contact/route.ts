@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     hv_hp_two?: string
   } | null
 
-  // Honeypot tripped — pretend success so bots don't retry
+  // Honeypot tripped - pretend success so bots don't retry
   const honeypotFilled = Boolean(
     body?.company?.trim() ||
       body?.website?.trim() ||
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       body?.hv_hp_two?.trim(),
   )
   if (honeypotFilled) {
-    console.warn('[contact] honeypot tripped — dropping submission')
+    console.warn('[contact] honeypot tripped - dropping submission')
     return NextResponse.json({ ok: true })
   }
 

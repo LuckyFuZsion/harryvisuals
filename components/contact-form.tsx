@@ -80,7 +80,7 @@ export function ContactForm() {
         className="relative flex flex-col gap-5 rounded-lg border border-border bg-card p-6 sm:p-8"
         onSubmit={onSubmit}
       >
-        {/* Honeypot fields — obscure names avoid browser autofill */}
+        {/* Honeypot fields - obscure names avoid browser autofill */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0"

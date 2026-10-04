@@ -19,6 +19,6 @@ export const faqItems = [
   {
     question: 'Why choose Harry Visuals for sports photography?',
     answer:
-      'Harry focuses on the action, emotion and atmosphere of the game, delivering clean WebP-ready images suited to social channels, portfolios and club content — with a clear path from local coverage to bigger clubs.',
+      'Harry focuses on the action, emotion and atmosphere of the game, delivering clean WebP-ready images suited to social channels, portfolios and club content, with a clear path from local coverage to bigger clubs.',
   },
 ] as const
