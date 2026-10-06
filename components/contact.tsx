@@ -52,6 +52,11 @@ export function Contact() {
             Got a fixture, a campaign or a portrait session in mind? Drop me a
             message and let&apos;s make something that hits.
           </p>
+          <p className="mt-4 max-w-md text-pretty leading-relaxed text-muted-foreground">
+            Shoot fees are negotiable depending on the coverage you need.
+            Travel costs may apply for fixtures further afield - get in touch
+            for a clear quote before anything is booked.
+          </p>
 
           <ul className="mt-10 flex flex-col gap-5">
             {details.map(({ icon: Icon, label, value, href }) => (

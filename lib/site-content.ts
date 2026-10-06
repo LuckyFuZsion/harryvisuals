@@ -14,9 +14,14 @@ export const faqItems = [
       'Harry Visuals specialises in football and sports photography: match-day action, athlete portraits, social media content and brand or sponsor shoots for players, clubs and local teams across Lincolnshire and beyond.',
   },
   {
+    question: 'How much does a shoot cost?',
+    answer:
+      'Fees are negotiable based on the type of coverage, duration and deliverables. Travel fees may also apply for fixtures outside the local area. Harry will agree a clear quote with you before the shoot so there are no surprises.',
+  },
+  {
     question: 'How do I book a football photography shoot?',
     answer:
-      'Use the contact form on this site, email Platts_harry@icloud.com or call +44 7710 061217. Share the fixture date, location and shoot type so Harry can confirm availability and next steps quickly.',
+      'Use the contact form on this site, email Platts_harry@icloud.com or call +44 7710 061217. Share the fixture date, location and shoot type so Harry can confirm availability, fees and next steps quickly.',
   },
   {
     question: 'Where is Harry Visuals based?',

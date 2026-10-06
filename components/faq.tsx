@@ -26,8 +26,8 @@ export function Faq() {
         </h2>
         <p className="speakable-summary mt-6 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
           Harry Visuals is Lincolnshire-based football photography for match
-          days, portraits and club content. Here is how booking works, what is
-          covered, and why athletes choose these images.
+          days, portraits and club content. Fees are negotiable, travel may
+          apply further afield, and every booking starts with a clear quote.
         </p>
 
         <ul className="mt-10 divide-y divide-border border-y border-border">
